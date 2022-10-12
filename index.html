@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>FHK业火余烬官网</title>
+    <meta name="description" content="Re01 编程课的Flex布局演示。" />
+    <link rel="icon" href="/favicon.ico" />
+    <link rel="manifest" href="/manifest.json" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <meta name="msapplication-TileColor" content="#da532c" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <style>
+      body {
+        margin: 0;
+        /* vh 是view height 既视窗高度的意思，100就是100%占满窗口高度 */
+        height: 100vh;
+        background-color: #eee;
+        background: url("wallhaven-3lo9v3_1600x900.png");
+        background-repeat: no-repeat;
+        }
+      .flex {
+        display: flex;
+      }
+      /* 占满比例 */
+      .flex1 {
+        flex: 1;
+      }
+      /* 竖向 */
+      .column {
+        flex-direction: column;
+      }
+      /* 阴影 */
+      .yinYing {
+        box-shadow: rgb(0 0 0 / 20%) 0px 2px 1px -1px,
+          rgb(0 0 0 / 14%) 0px 1px 1px 0px, rgb(0 0 0 / 12%) 0px 1px 3px 0px;
+      }
+      /* 白色背景 */
+      .baiSe {
+        background-color: #fff;
+      }
+      /* 上下左右外边距 */
+      .mg8 {
+        margin: 8px;
+      }
+      /* 右外边距 */
+      .mgr8 {
+        margin-right: 8px;
+      }
+      /* 上外边距 */
+      .mgt8 {
+        margin-top: 8px;
+      }
+      /* 四个小盒子 */
+      .shuJu {
+        height: 200px;
+      }
+      /* 中间的大盒子 */
+      .lieBiaoXiang {
+        height: 4000px;
+      }
+      /* 导航条 */
+      .daoHang {
+        padding: 15px 20px;
+        border-bottom: 2px solid rgb(201, 201, 201);
+        font-size: 14px;
+        color: rgb(0, 0, 0);
+      }
+      /*鼠标滚轮*/
+      .neiRong::-webkit-scrollbar {
+        display: none; /* Chrome Safari */
+      }
+      div.sticky {
+        position: -webkit-sticky;
+        position: sticky;
+        top: 5px;
+        padding: 5px;
+        
+        border: 2px solid hsl(0, 0%, 3%);
+      }
+      .nav{
+        width: 1000px;
+        height: 80px;
+        position: relative;
+        top: 0;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+        border-radius: 10px;
+        }
+      .nav ul{
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center;
+        right: 5%;
+      }
+      .nav ul .nav-box{
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        /* 如果导航栏就六个导航，那么每个导航的宽度都是整个导航的六分之一 */
+        width: calc((100% / 6)*1);
+        height: 10px;
+        border-radius: 2px;
+        transition: .5s;
+      }
+      .nav ul li{
+        width: 100%;
+        text-align: center;
+      }
+      .nav ul li a{
+        color: rgb(4, 5, 8);
+        font: 100 30px '优设标题黑';
+        display: block;
+        width: 100%;
+        height: 100%;
+        line-height: 70px;
+      }
+      .nav ul li:nth-child(1):hover~.nav-box{
+        left: calc(100% / 6 *0);
+        background-color: rgb(250, 190, 250);
+      }
+      .nav ul li:nth-child(2):hover~.nav-box{
+        left: calc(100% / 6 *1);
+        background-color: red;
+      }
+      .nav ul li:nth-child(3):hover~.nav-box{
+        left: calc(100% / 6 *2);
+        background-color: #d18df8;
+      }
+      .nav ul li:nth-child(4):hover~.nav-box{
+        left: calc(100% / 6 *3);
+        background-color: #ffb1b1;
+      }
+      .nav ul li:nth-child(5):hover~.nav-box{
+        left: calc(100% / 6 *4);
+        background-color: #8da1f8;
+      }
+      .nav ul li:nth-child(6):hover~.nav-box{
+        left: calc(100% / 6 *5);
+        background-color: #7df88e;
+      }
+      /*魔方样式的时间*/
+      @font-face {
+        font-family: "Digital-7";
+        src: url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/184191/Digital-7.eot?#iefix")
+            format("embedded-opentype"),
+          url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/184191/Digital-7.woff")
+            format("woff"),
+          url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/184191/Digital-7.ttf")
+            format("truetype"),
+          url("https://s3-us-west-2.amazonaws.com/s.cdpn.io/184191/Digital-7.svg#Digital-7")
+            format("svg");
+        font-weight: normal;
+        font-style: normal;
+      }
+      ::selection {
+        background: #333;
+      }
+      ::-moz-selection {
+        background: #111;
+      }
+      *,
+      html {
+        margin: 0;
+      }
+      /*下面这个z-index删去的话鼠标放上魔方就可以动起来，不删的话就不会动，但是作为背景*/
+      figure {
+        z-index: -2;
+        width: 210px;
+        height: 210px;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin-top: -105px;
+        margin-left: -105px;
+        transform-style: preserve-3d;
+        -webkit-transform-style: preserve-3d;
+        -webkit-transform: rotateX(-35deg) rotateY(45deg);
+        transform: rotateX(-35deg) rotateY(45deg);
+        transition: 2s;
+      }
+      figure:hover {
+        -webkit-transform: rotateX(-50deg) rotateY(45deg);
+        transform: rotateX(-50deg) rotateY(45deg);
+      }
+      .face {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        -webkit-transform-origin: center;
+        transform-origin: center;
+        background: rgb(0, 0, 0);
+        text-align: center;
+      }
+      .pp {
+        font-size: 180px;
+        font-family: "Digital-7";
+        margin-top: 20px;
+        color: #2982ff;
+        text-shadow: 0px 0px 5px #000;
+        -webkit-animation: color 10s infinite;
+        animation: color 10s infinite;
+        line-height: 180px;
+      }
+      .front {
+        -webkit-transform: translate3d(0, 0, 105px);
+        transform: translate3d(0, 0, 105px);
+        background: rgb(160, 160, 160);
+      }
+      .left {
+        -webkit-transform: rotateY(-90deg) translate3d(0, 0, 105px);
+        transform: rotateY(-90deg) translate3d(0, 0, 105px);
+        background: rgb(202, 202, 202);
+      }
+      .top {
+        -webkit-transform: rotateX(90deg) translate3d(0, 0, 105px);
+        transform: rotateX(90deg) translate3d(0, 0, 105px);
+        background: rgb(255, 255, 255);
+      }
+
+      @keyframes color {
+        0% {
+          color: #2982ff;
+          text-shadow: 0px 0px 5px #000;
+        }
+        50% {
+          color: #cc4343;
+          text-shadow: 0px 0px 5px #ff0000;
+        }
+      }
+      @-webkit-keyframes color {
+        0% {
+          color: #2982ff;
+          text-shadow: 0px 0px 5px #000;
+        }
+        50% {
+          color: #cc4343;
+          text-shadow: 0px 0px 5px #ff0000;
+        }
+      }
+      /* 当屏幕宽度小于600px时要改变的css */
+      @media (max-width: 600px) {
+        /* 小屏幕上取消侧边栏，后面学js时会教怎么弹出 */
+        .ceBian {
+          display: none;
+        }
+        /* 内容栏和数据栏flex方向改为竖向 */
+        .neiRong {
+          flex-direction: column;
+        }
+        .shuJuQu {
+          flex-direction: column;
+        }
+        /* 右区加左外边距 */
+        .youQu {
+          margin-left: 8px;
+        }
+        /* 数据块外边距，大小改为自动宽高 */
+        .shuJu {
+          margin: 0 0 8px;
+          flex: auto;
+        }
+      }
+    </style>
+  </head>
+  <body class="flex">
+    <!-- 侧边栏 -->
+    <div
+      style="width: 200px; z-index: 3"
+      class="ceBian flex column baiSe yinYing"
+    >
+      <!-- 侧边头像栏 -->
+      <div
+        style="
+          padding: 20px;
+          align-items: center;
+          justify-content: center;
+          border-bottom: 2px solid #999;
+        "
+        class="flex"
+      >
+        <img
+          alt="logo"
+          src="https://kangwenchang.com/logo.png"
+          width="40px"
+          height="40px"
+        />
+        <div style="margin-left: 10px">用户的头像</div>
+      </div>
+      <!-- 导航栏 -->
+      <div class="flex1">
+        <div class="daoHang">个人中心</div>
+        <div class="daoHang">设置</div>
+        <div class="daoHang">社区</div>
+        <div class="daoHang">个性化</div>
+        <div class="daoHang">关于我们</div>
+        <div class="daoHang">帮助</div>
+        <div class="daoHang">当前版本：0.1.2</div>
+      </div>
+    </div>
+    <!-- 主区域 -->
+    <div class="flex flex1 column">
+      <!-- 头部栏 -->
+      <div style="height: 100px; z-index: 2" class="yinYing">
+        <div style="text-align: center;display: flex;">
+          <div style="flex:3;"><h1>这是头部栏，到时候放张图</h1></div>
+          <div style="flex:1"><h1>天气,纪年,时间...</h1></div>
+        </div>
+      </div>
+      <!-- 内容区 -->
+      <div class="flex flex1 neiRong" style="overflow: auto">
+        <!-- 左区 -->
+        <div style="flex: 3;height: 800px;" class="flex column mg8">
+          <!-- 鼠标跟踪导航项 -->
+          <div class="flex shuJuQu nav">
+            <ul>
+            <li><a href="#">BiKey</a></li>
+            <li><a href="#">华子</a></li>
+            <li><a href="#">胖头</a></li>
+            <li><a href="#">玉米</a></li>
+            <li><a href="#">绘文</a></li>
+            <li><a href="#">老樊</a></li>
+            <div class="nav-box"></div>
+            </ul>
+          </div>
+          <!-- 列表区，列表数据可以无限增加 -->
+          <div class="flex column">
+            <div class="lieBiaoXiang mgt8 yinYing">
+              <p>这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区</p>
+              <p>这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区</p>
+              <p>这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区</p>
+              <p>这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区</p>
+              <p>这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区</p>
+              <p>这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区</p>
+              <p>这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区</p>
+              <p>这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区</p>
+              <p>这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区</p>
+              <p>这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区</p>
+              <p>这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区</p>
+              <p>这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区</p>
+              <p>这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区</p>
+              <p>这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区</p>
+              <p>这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区这是内容区</p>
+            </div>
+          </div>
+        </div>
+        <!-- 右区 -->
+        <div style="flex: 1;height: 10086114514px;" class="youQu flex column mgr8 mgt8">
+          <div style="height: 650px;" class="sticky">
+            <!-- 公告区 -->
+            <div style="height: 500px;border: 2px solid #0d0e0d;font-family: 幼圆;font-size: larger;" class="yinYing">
+            <h1 style="text-align: center;margin-top: 8px;">公告栏</h1>
+            <p>嗨嗨嗨</p>
+            <p>嗨嗨嗨</p>
+            <p>嗨嗨嗨</p>
+            <p>嗨嗨嗨</p>
+            <p>嗨嗨嗨</p>
+            <p>嗨嗨嗨</p>
+            <p>嗨嗨嗨</p>
+            <p>嗨嗨嗨</p>
+            <p>嗨嗨嗨</p>
+            <p>嗨嗨嗨</p>
+            </div>
+            <!--音乐栏-->
+            <div style="height: 130px;border: 2px solid #0d0e0d;margin-top: 8px;" class="yinYing">
+            <h1 style="text-align: center;margin-top: 8px;font-family: 宋体;">音乐栏</h1>
+            </div>
+            <figure>
+              <div class="face top"><p id="s" class="pp"></p></div>
+              <div class="face front"><p id="m" class="pp"></p></div>
+              <div class="face left"><p id="h" class="pp"></p></div>
+            </figure>
+        </div>
+      </div>
+    </div>
+    <script>
+      function date_time(id) {
+        date = new Date();
+        h = date.getHours();
+        if (h < 10) {
+          h = "0" + h;
+        }
+        m = date.getMinutes();
+        if (m < 10) {
+          m = "0" + m;
+        }
+        s = date.getSeconds();
+        if (s < 10) {
+          s = "0" + s;
+        }
+        document.getElementById("s").innerHTML = "" + s;
+        document.getElementById("m").innerHTML = "" + m;
+        document.getElementById("h").innerHTML = "" + h;
+        setTimeout('date_time("' + "s" + '");', "1000");
+        return true;
+      }
+      window.onload = date_time("s");
+    </script>
+  </body>
+</html>
